@@ -23,9 +23,9 @@ class Forgejo
     {
         return await httpClient.GetFromJsonAsync<List<Repository>>($"{settings.Url}/api/v1/user/repos");
     }
-    public static async Task<List<Label>> GetRepositoryLabels(Repository repository, HttpClient httpClient, Settings settings)
+    public static async Task<List<Models.Forgejo.Label>> GetRepositoryLabels(Repository repository, HttpClient httpClient, Settings settings)
     {
-        return await httpClient.GetFromJsonAsync<List<Label>>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels");
+        return await httpClient.GetFromJsonAsync<List<Models.Forgejo.Label>>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels");
     }
     public static void CreateRepositoryLabel()
     {

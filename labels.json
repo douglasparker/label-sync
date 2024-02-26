@@ -1,184 +1,184 @@
 [
     {
-        "name": "Priority/Low",
-        "description": "",
-        "color": "EC5F67",
-        "exclusive": true,
-        "archived": false
+        "Name": "Priority/Low",
+        "Description": "",
+        "Color": "EC5F67",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Priority/Medium",
-        "description": "",
-        "color": "EC5F67",
-        "exclusive": true,
-        "archived": false
+        "Name": "Priority/Medium",
+        "Description": "",
+        "Color": "EC5F67",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Priority/High",
-        "description": "",
-        "color": "EC5F67",
-        "exclusive": true,
-        "archived": false
+        "Name": "Priority/High",
+        "Description": "",
+        "Color": "EC5F67",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Priority/Critical",
-        "description": "",
-        "color": "EC5F67",
-        "exclusive": true,
-        "archived": false
+        "Name": "Priority/Critical",
+        "Description": "",
+        "Color": "EC5F67",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Bug",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Bug",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Dependency",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Dependency",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Documentation",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Documentation",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Enhancement",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Enhancement",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Feature",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Feature",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Feature Request",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Feature Request",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Legal",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Legal",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Question",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Question",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Refactor",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Refactor",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Security",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Security",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Type/Text",
-        "description": "",
-        "color": "6699CC",
-        "exclusive": true,
-        "archived": false
+        "Name": "Type/Text",
+        "Description": "",
+        "Color": "6699CC",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Category/Hardware",
-        "description": "",
-        "color": "F9EF57",
-        "exclusive": true,
-        "archived": false
+        "Name": "Category/Hardware",
+        "Description": "",
+        "Color": "F9EF57",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Category/Network",
-        "description": "",
-        "color": "F9EF57",
-        "exclusive": true,
-        "archived": false
+        "Name": "Category/Network",
+        "Description": "",
+        "Color": "F9EF57",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Category/Software",
-        "description": "",
-        "color": "F9EF57",
-        "exclusive": true,
-        "archived": false
+        "Name": "Category/Software",
+        "Description": "",
+        "Color": "F9EF57",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Feedback/Help Wanted",
-        "description": "",
-        "color": "F99157",
-        "exclusive": true,
-        "archived": false
+        "Name": "Feedback/Help Wanted",
+        "Description": "",
+        "Color": "F99157",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Feedback/Review Needed",
-        "description": "",
-        "color": "F99157",
-        "exclusive": true,
-        "archived": false
+        "Name": "Feedback/Review Needed",
+        "Description": "",
+        "Color": "F99157",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Feedback/Revision Needed",
-        "description": "",
-        "color": "F99157",
-        "exclusive": true,
-        "archived": false
+        "Name": "Feedback/Revision Needed",
+        "Description": "",
+        "Color": "F99157",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Review/Approved",
-        "description": "",
-        "color": "C594C5",
-        "exclusive": true,
-        "archived": false
+        "Name": "Review/Approved",
+        "Description": "",
+        "Color": "C594C5",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Review/Declined",
-        "description": "",
-        "color": "C594C5",
-        "exclusive": true,
-        "archived": false
+        "Name": "Review/Declined",
+        "Description": "",
+        "Color": "C594C5",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Review/Duplicate",
-        "description": "",
-        "color": "C594C5",
-        "exclusive": true,
-        "archived": false
+        "Name": "Review/Duplicate",
+        "Description": "",
+        "Color": "C594C5",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Review/Not A Bug",
-        "description": "",
-        "color": "C594C5",
-        "exclusive": true,
-        "archived": false
+        "Name": "Review/Not A Bug",
+        "Description": "",
+        "Color": "C594C5",
+        "Exclusive": true,
+        "Archived": false
     },
     {
-        "name": "Review/Verified",
-        "description": "",
-        "color": "C594C5",
-        "exclusive": true,
-        "archived": false
+        "Name": "Review/Verified",
+        "Description": "",
+        "Color": "C594C5",
+        "Exclusive": true,
+        "Archived": false
     }
 ]
