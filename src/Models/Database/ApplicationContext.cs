@@ -19,6 +19,6 @@ public class Label
 {
     public Int64 Id { get; set; }
     public Int64 IndexId { get; set; }
-    public Int64 LabelId  { get; set; }
-    public Int64 RepositoryId  { get; set; }
+    public Int64 LabelId { get; set; }
+    public Int64 RepositoryId { get; set; }
 }

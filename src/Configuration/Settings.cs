@@ -1,6 +1,7 @@
 namespace Configuration;
 
-class Settings {
+class Settings
+{
     public string Url { get; set; }
     public string Username { get; set; }
     public List<string> Include { get; set; }

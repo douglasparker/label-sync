@@ -4,10 +4,8 @@ using Models.Forgejo;
 using Models.Database;
 using Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Net.Http.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LabelSync;
 
@@ -47,21 +45,6 @@ class Program
         _repositories = await FilterRepositories();
         await CreateLabels();
         await _database.Database.CloseConnectionAsync();
-
-        // Single
-        /*
-        Repository r = await API.Forgejo.GetRepository("douglasparker/.profile", _httpClient, _settings);
-        Console.WriteLine(r.Full_Name);
-        */
-
-        // List
-        /*
-        List<Repository> repositories = await API.Forgejo.GetRepositories(_httpClient, _settings);
-        foreach(var item in repositories.OrderBy(o => o.Id)) {
-            Console.WriteLine(item.Id);
-        }
-        */
-
     }
 
     static async Task<List<Repository>> FilterRepositories()
