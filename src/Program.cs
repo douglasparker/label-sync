@@ -114,7 +114,7 @@ class Program
                 Console.WriteLine($"[INFO]: [Include] {repo.Full_Name}");
             }
         }
-        
+
         return repositories;
     }
 

@@ -33,7 +33,7 @@ class Forgejo
     }
     public static async Task<HttpResponseMessage> UpdateRepositoryLabel(Repository repository, Models.Forgejo.Label label, Int64 labelId, HttpClient httpClient, Settings settings)
     {
-        return await httpClient.PatchAsJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/${labelId}", label);
+        return await httpClient.PatchAsJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/{labelId}", label);
     }
     public static async Task<Models.Forgejo.Label> DeleteRepositoryLabel(Repository repository, Int64 labelId, HttpClient httpClient, Settings settings)
     {
