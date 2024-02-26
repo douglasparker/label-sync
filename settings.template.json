@@ -1,0 +1,10 @@
+{
+    "Settings": {
+        "Url": "",
+        "Username": "",
+        "Include": [],
+        "Exclude": [],
+        "ApiKey": "",
+        "LogLevel": ""
+    }
+}
