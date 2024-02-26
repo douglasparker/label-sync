@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags: ["*"]
+
+env:
+  REGISTRY: code.douglasparker.dev
+  REGISTRY_USERNAME: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
+  REGISTRY_IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      
+      - name: Login to the GitHub Container Registry
+        uses: actions/docker-login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+      
+      - name: Extract repository metadata (tags, labels)
+        id: meta
+        uses: actions/docker-metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,enable=${{ endsWith(github.ref, '-beta') }},value=beta
+            type=raw,enable=${{ endsWith(github.ref, '-alpha') }},value=alpha
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=edge
+      
+      - name: Build the Docker image and publish to the Docker Registry
+        uses: actions/docker-build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
