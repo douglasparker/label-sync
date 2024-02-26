@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using Configuration;
-using Microsoft.Extensions.Configuration;
-using Models.ForgejoAPI;
+using Models.Forgejo;
 
 namespace API;
 
@@ -24,9 +23,9 @@ class Forgejo
     {
         return await httpClient.GetFromJsonAsync<List<Repository>>($"{settings.Url}/api/v1/user/repos");
     }
-    public static void GetRepositoryLabels()
+    public static async Task<List<Label>> GetRepositoryLabels(Repository repository, HttpClient httpClient, Settings settings)
     {
-
+        return await httpClient.GetFromJsonAsync<List<Label>>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels");
     }
     public static void CreateRepositoryLabel()
     {

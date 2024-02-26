@@ -1,7 +1,9 @@
 ﻿using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
-using Models.ForgejoAPI;
+using Models.Forgejo;
+using Models.Database;
 using Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace LabelSync;
 
@@ -10,6 +12,7 @@ class Program
     private static Settings _settings;
     private static HttpClient _httpClient = new();
     private static List<Repository> _repositories;
+    private static ApplicationContext _database = new ApplicationContext();
     static async Task Main(string[] args)
     {
         Console.WriteLine("LabelSync v0.0.0");
@@ -17,6 +20,8 @@ class Program
         if(!File.Exists(AppContext.BaseDirectory + "\\settings.json")) {
             File.Copy("settings.template.json", AppContext.BaseDirectory + "settings.json");
         }
+
+        Directory.CreateDirectory(AppContext.BaseDirectory + "database");
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("settings.json", optional: true, reloadOnChange: true)
@@ -32,7 +37,10 @@ class Program
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _httpClient.DefaultRequestHeaders.Add("Authorization", "token 07ca309c661275b91ee989c8c6ff133fba838dbf");
 
+        await _database.Database.OpenConnectionAsync();
+        await _database.Database.MigrateAsync();
         await FilterRepositories();
+        await _database.Database.CloseConnectionAsync();
 
         // Single
         /*
@@ -99,6 +107,18 @@ class Program
 
     static async Task LinkLabels()
     {
-        
+        foreach(var repo in _repositories.OrderBy(o => o.Full_Name)) {
+            foreach(var label in await API.Forgejo.GetRepositoryLabels(repo, _httpClient, _settings)) {
+                var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == repo.Id && o.LabelId == label.Id).FirstAsync<Models.Database.Label>();
+                if(labelSearch == null) {
+                    // for each labels.json, add to db
+                    await _database.AddAsync<Models.Database.Label>(new Models.Database.Label {
+                        IndexId = 0,
+                        LabelId = label.Id,
+                        RepositoryId = repo.Id
+                    });
+                }
+            }
+        }
     }
 }

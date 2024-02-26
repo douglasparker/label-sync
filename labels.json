@@ -1,0 +1,184 @@
+[
+    {
+        "name": "Priority/Low",
+        "description": "",
+        "color": "EC5F67",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Priority/Medium",
+        "description": "",
+        "color": "EC5F67",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Priority/High",
+        "description": "",
+        "color": "EC5F67",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Priority/Critical",
+        "description": "",
+        "color": "EC5F67",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Bug",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Dependency",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Documentation",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Enhancement",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Feature",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Feature Request",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Legal",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Question",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Refactor",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Security",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Type/Text",
+        "description": "",
+        "color": "6699CC",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Category/Hardware",
+        "description": "",
+        "color": "F9EF57",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Category/Network",
+        "description": "",
+        "color": "F9EF57",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Category/Software",
+        "description": "",
+        "color": "F9EF57",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Feedback/Help Wanted",
+        "description": "",
+        "color": "F99157",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Feedback/Review Needed",
+        "description": "",
+        "color": "F99157",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Feedback/Revision Needed",
+        "description": "",
+        "color": "F99157",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Review/Approved",
+        "description": "",
+        "color": "C594C5",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Review/Declined",
+        "description": "",
+        "color": "C594C5",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Review/Duplicate",
+        "description": "",
+        "color": "C594C5",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Review/Not A Bug",
+        "description": "",
+        "color": "C594C5",
+        "exclusive": true,
+        "archived": false
+    },
+    {
+        "name": "Review/Verified",
+        "description": "",
+        "color": "C594C5",
+        "exclusive": true,
+        "archived": false
+    }
+]

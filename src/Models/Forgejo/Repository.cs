@@ -1,4 +1,4 @@
-namespace Models.ForgejoAPI;
+namespace Models.Forgejo;
 
 class Repository
 {
