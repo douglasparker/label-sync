@@ -27,17 +27,17 @@ class Forgejo
     {
         return await httpClient.GetFromJsonAsync<List<Models.Forgejo.Label>>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels");
     }
-    public static void CreateRepositoryLabel()
+    public static async Task<HttpResponseMessage> CreateRepositoryLabel(Repository repository, Models.Forgejo.Label label, HttpClient httpClient, Settings settings)
     {
-
+        return await httpClient.PostAsJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels", label);
     }
-    public static void UpdateRepositoryLabel()
+    public static async Task<HttpResponseMessage> UpdateRepositoryLabel(Repository repository, Models.Forgejo.Label label, Int64 labelId, HttpClient httpClient, Settings settings)
     {
-
+        return await httpClient.PatchAsJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/${labelId}", label);
     }
-    public static void DeleteRepositoryLabel()
+    public static async Task<Models.Forgejo.Label> DeleteRepositoryLabel(Repository repository, Int64 labelId, HttpClient httpClient, Settings settings)
     {
-
+        return await httpClient.DeleteFromJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/${labelId}");
     }
     public static void PurgeRepositoryLabels()
     {

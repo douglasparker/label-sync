@@ -6,6 +6,8 @@ using Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LabelSync;
 
@@ -43,7 +45,7 @@ class Program
         await _database.Database.OpenConnectionAsync();
         await _database.Database.MigrateAsync();
         _repositories = await FilterRepositories();
-        await LinkLabels();
+        await CreateLabels();
         await _database.Database.CloseConnectionAsync();
 
         // Single
@@ -64,19 +66,17 @@ class Program
 
     static async Task<List<Repository>> FilterRepositories()
     {
-        Console.WriteLine("[INFO]: Filtering Repositories...");
-
         if (_settings.Include != null && _settings.Include.Count > 0)
         {
-            Console.WriteLine("[INFO]: Filter Type: Include");
+            Console.WriteLine("[INFO]: [FILTER TYPE]: Include");
         }
         else if (_settings.Exclude != null && _settings.Exclude.Count > 0)
         {
-            Console.WriteLine("[INFO]: Filter Type: Exclude");
+            Console.WriteLine("[INFO]: [FILTER TYPE]: Exclude");
         }
         else
         {
-            Console.WriteLine("[INFO]: Filter Type: None");
+            Console.WriteLine("[INFO]: [FILTER TYPE]: None");
         }
 
         List<Repository> repositories = await API.Forgejo.GetRepositories(_httpClient, _settings);
@@ -91,7 +91,7 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine($"[INFO]: Include: {repo.Full_Name}");
+                    Console.WriteLine($"[INFO]: [Include] {repo.Full_Name}");
                 }
             }
 
@@ -104,18 +104,17 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine($"[INFO]: Include: {repo.Full_Name}");
+                    Console.WriteLine($"[INFO]: [Include] {repo.Full_Name}");
                 }
             }
 
             // No Filter:
             else
             {
-                Console.WriteLine($"[INFO]: Include: {repo.Full_Name}");
+                Console.WriteLine($"[INFO]: [Include] {repo.Full_Name}");
             }
         }
-
-        Console.WriteLine("[INFO]: Repository filtering complete.");
+        
         return repositories;
     }
 
@@ -146,12 +145,51 @@ class Program
                                 LabelId = label.Id,
                                 RepositoryId = repo.Id
                             });
-                            Console.WriteLine($"[INFO]: Linked: [Repository]: {repo.Full_Name} [Index ID]: {customLabels.IndexOf(customLabel)} [Label ID]: {label.Id}");
+                            Console.WriteLine($"[INFO]: [LINK] {repo.Full_Name} (ID: {label.Id})");
                         }
                     }
                 }
             }
         }
         await _database.SaveChangesAsync();
+    }
+    static async Task CreateLabels()
+    {
+        await LinkLabels();
+        foreach (var repo in _repositories.OrderBy(o => o.Full_Name))
+        {
+            using FileStream openStream = File.OpenRead("labels.json");
+            // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
+            List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
+
+            foreach (Configuration.Label customLabel in customLabels)
+            {
+                var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == repo.Id && o.IndexId == customLabels.IndexOf(customLabel)).FirstOrDefaultAsync<Models.Database.Label>();
+                if (labelSearch == null)
+                {
+                    Models.Forgejo.Label label = new Models.Forgejo.Label();
+                    label.Name = customLabel.Name;
+                    label.Description = customLabel.Description;
+                    label.Color = customLabel.Color;
+                    label.Exclusive = customLabel.Exclusive;
+                    label.Is_Archived = customLabel.Archived;
+                    HttpResponseMessage response = await API.Forgejo.CreateRepositoryLabel(repo, label, _httpClient, _settings);
+                    Models.Forgejo.Label newLabel = await response.Content.ReadFromJsonAsync<Models.Forgejo.Label>();
+                    Console.WriteLine($"[INFO]: [CREATE] ${repo.Full_Name} (ID: ${newLabel.Id})");
+                }
+                else
+                {
+                    Models.Forgejo.Label label = new Models.Forgejo.Label();
+                    label.Name = customLabel.Name;
+                    label.Description = customLabel.Description;
+                    label.Color = customLabel.Color;
+                    label.Exclusive = customLabel.Exclusive;
+                    label.Is_Archived = customLabel.Archived;
+                    HttpResponseMessage response = await API.Forgejo.UpdateRepositoryLabel(repo, label, labelSearch.LabelId, _httpClient, _settings);
+                    Console.WriteLine($"[INFO]: [UPDATE] {repo.Full_Name} (ID: {labelSearch.LabelId})");
+                }
+            }
+        }
+        await LinkLabels();
     }
 }
