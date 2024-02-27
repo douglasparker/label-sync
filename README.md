@@ -8,7 +8,7 @@ I created Forgejo Label Sync because I am very opinionated about my labels, and 
 
 That's where Forgejo Label Sync comes in to save the day! Here is how it works!
 
-1. You setup `settings.json` with your forgejo instance url, apikey, and include / exclude filters if you want them.
+1. You setup `settings.json` with your forgejo instance url, api key, and include / exclude filters if you want them.
 
 2. You create a `labels.json` that defines all of your labels as you want them.
 
@@ -30,7 +30,7 @@ Forgejo Label Sync will sync the following changes to labels:
 - Exclusive
 - Archive
 
-### Limitations
+## Limitations
 
 Forgejo Label Sync creates links between your repository labels in your Forgejo instance by associating your repository ID and label ID with the index of the label in `labels.json`.
 
