@@ -37,7 +37,7 @@ class Program
         }
 
         IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("settings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile(AppContext.BaseDirectory + "\\data\\settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .AddCommandLine(args)
             .Build();
@@ -124,7 +124,7 @@ class Program
                 var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == repo.Id && o.LabelId == label.Id).FirstOrDefaultAsync<Models.Database.Label>();
                 if (labelSearch == null)
                 {
-                    using FileStream openStream = File.OpenRead("labels.json");
+                    using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "\\data\\labels.json");
                     // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
                     List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
 
@@ -151,7 +151,7 @@ class Program
         await LinkLabels();
         foreach (var repo in _repositories.OrderBy(o => o.Full_Name))
         {
-            using FileStream openStream = File.OpenRead("labels.json");
+            using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "\\data\\labels.json");
             // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
             List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
 
