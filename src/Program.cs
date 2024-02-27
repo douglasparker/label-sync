@@ -19,12 +19,22 @@ class Program
     {
         Console.WriteLine("LabelSync v0.0.0");
 
-        if (!File.Exists(AppContext.BaseDirectory + "\\settings.json"))
+        Directory.CreateDirectory(AppContext.BaseDirectory + "data");
+
+        if (!File.Exists(AppContext.BaseDirectory + "\\data\\settings.json"))
         {
-            File.Copy("settings.template.json", AppContext.BaseDirectory + "settings.json");
+            File.Copy("settings.template.json", AppContext.BaseDirectory + "\\data\\settings.json");
         }
 
-        Directory.CreateDirectory(AppContext.BaseDirectory + "database");
+        if(!File.Exists(AppContext.BaseDirectory + "\\data\\settings.json")) {
+            Console.WriteLine("[ERROR]: settings.json is missing!");
+            Environment.Exit(1);
+        }
+
+        if(!File.Exists(AppContext.BaseDirectory + "\\data\\labels.json")) {
+            Console.WriteLine("[ERROR]: labels.json is missing!");
+            Environment.Exit(1);
+        }
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("settings.json", optional: true, reloadOnChange: true)
