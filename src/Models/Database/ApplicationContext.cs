@@ -8,7 +8,7 @@ public class ApplicationContext : DbContext
     public string DbPath { get; }
     public ApplicationContext()
     {
-        DbPath = AppContext.BaseDirectory + "data\\app.db";
+        DbPath = AppContext.BaseDirectory + "data/app.db";
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

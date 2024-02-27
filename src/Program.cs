@@ -21,23 +21,23 @@ class Program
 
         Directory.CreateDirectory(AppContext.BaseDirectory + "data");
 
-        if (!File.Exists(AppContext.BaseDirectory + "\\data\\settings.json"))
+        if (!File.Exists(AppContext.BaseDirectory + "/data/settings.json"))
         {
-            File.Copy("settings.template.json", AppContext.BaseDirectory + "\\data\\settings.json");
+            File.Copy("settings.template.json", AppContext.BaseDirectory + "/data/settings.json");
         }
 
-        if(!File.Exists(AppContext.BaseDirectory + "\\data\\settings.json")) {
+        if(!File.Exists(AppContext.BaseDirectory + "/data/settings.json")) {
             Console.WriteLine("[ERROR]: settings.json is missing!");
             Environment.Exit(1);
         }
 
-        if(!File.Exists(AppContext.BaseDirectory + "\\data\\labels.json")) {
+        if(!File.Exists(AppContext.BaseDirectory + "/data/labels.json")) {
             Console.WriteLine("[ERROR]: labels.json is missing!");
             Environment.Exit(1);
         }
 
         IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile(AppContext.BaseDirectory + "\\data\\settings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile(AppContext.BaseDirectory + "/data/settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .AddCommandLine(args)
             .Build();
@@ -124,7 +124,7 @@ class Program
                 var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == repo.Id && o.LabelId == label.Id).FirstOrDefaultAsync<Models.Database.Label>();
                 if (labelSearch == null)
                 {
-                    using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "\\data\\labels.json");
+                    using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "/data/labels.json");
                     // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
                     List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
 
@@ -151,7 +151,7 @@ class Program
         await LinkLabels();
         foreach (var repo in _repositories.OrderBy(o => o.Full_Name))
         {
-            using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "\\data\\labels.json");
+            using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "/data/labels.json");
             // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
             List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
 
