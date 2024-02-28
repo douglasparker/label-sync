@@ -36,4 +36,44 @@ Forgejo Label Sync creates links between your repository labels in your Forgejo 
 
 This means that changing the order of labels and deleting labels in `labels.json` will result in the the index changing, making the established link between labels broken.
 
-In a future update, this will be addressed by allowing you to rebuild the links in the database from scratch by passing a flag or environmental variable. 
+In a future update, this will be addressed by allowing you to rebuild the links in the database from scratch by passing a flag or environmental variable.
+
+## Installation
+
+### Docker Compose
+
+```docker
+name: ofelia
+
+services:
+  ofelia:
+    image: mcuadros/ofelia:latest
+    container_name: ofelia
+    depends_on:
+      - forgejo-label-sync
+    labels:
+      ofelia.job-run.forgejo-label-sync.schedule: "@every 15m"
+      ofelia.job-run.forgejo-label-sync.container: "forgejo-label-sync"
+      ofelia.job-run.forgejo-label-sync.no-overlap: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: daemon --docker
+    restart: unless-stopped
+
+  forgejo-label-sync:
+    image: code.douglasparker.dev/forgejo/label-sync:latest
+    container_name: forgejo-label-sync
+    volumes:
+      - forgejo-label-sync:/app/data
+
+volumes:
+  forgejo-label-sync:
+```
+
+#### Edit Settings
+
+`docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json`
+
+#### Edit Labels
+
+`docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json`
