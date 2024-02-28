@@ -40,6 +40,11 @@ In a future update, this will be addressed by allowing you to rebuild the links 
 
 ## Installation
 
+> [!NOTE]
+> While compiled binaries are provided, Docker Compose is the recommended way to run Forgejo Label Sync.
+
+We use [Ofelia](https://github.com/mcuadros/ofelia) as our job scheduler to make it easier to run Forgejo Label Sync on a schedule.
+
 ### Docker Compose
 
 ```docker
@@ -72,8 +77,12 @@ volumes:
 
 #### Edit Settings
 
-`docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json`
+```docker
+docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json
+```
 
 #### Edit Labels
 
-`docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json`
+```docker
+docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json
+```
