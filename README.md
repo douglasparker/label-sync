@@ -40,8 +40,8 @@ In a future update, this will be addressed by allowing you to rebuild the links 
 
 ## Installation
 
-> [!NOTE]
-> While compiled binaries are provided, Docker Compose is the recommended way to run Forgejo Label Sync.
+NOTE:
+While compiled binaries are provided, Docker Compose is the recommended way to run Forgejo Label Sync.
 
 We use [Ofelia](https://github.com/mcuadros/ofelia) as our job scheduler to make it easier to run Forgejo Label Sync on a schedule.
 
