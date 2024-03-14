@@ -6,6 +6,8 @@ using Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Net.Http.Json;
+using Enum;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LabelSync;
 
@@ -48,13 +50,169 @@ class Program
 
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {_settings.ApiKey}");
+        switch(_settings.Forge)
+        {
+            case (int) Forge.GitHub:
+                Console.WriteLine("GitHub is not currently an implimented forge.");
+                break;
+            case (int) Forge.GitLab:
+                Console.WriteLine("[INFO]: [FORGE]: GitLab");
+                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_settings.ApiKey}");
+                await _database.Database.OpenConnectionAsync();
+                await _database.Database.MigrateAsync();
+                List<Models.GitLab.Project> projects = await FilterGitLabRepositories();
+                //await API.GitLab.PurgeAllProjectLabels(projects, _httpClient, _settings);
+                await CreateGitLabLabels(projects);
+                await _database.Database.CloseConnectionAsync();
 
-        await _database.Database.OpenConnectionAsync();
-        await _database.Database.MigrateAsync();
-        _repositories = await FilterRepositories();
-        await CreateLabels();
-        await _database.Database.CloseConnectionAsync();
+                break;
+            case (int) Forge.Bitbucket:
+                Console.WriteLine("Bitbucket is not currently an implimented forge.");
+                break;
+            case (int) Forge.Forgejo:
+                Console.WriteLine("[INFO]: [FORGE]: Forgejo");
+                _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {_settings.ApiKey}");
+                await _database.Database.OpenConnectionAsync();
+                await _database.Database.MigrateAsync();
+                _repositories = await FilterRepositories();
+                await CreateLabels();
+                await _database.Database.CloseConnectionAsync();
+                break;
+        }
+    }
+
+    static async Task<List<Models.GitLab.Project>> FilterGitLabRepositories()
+    {
+        if (_settings.Include != null && _settings.Include.Count > 0)
+        {
+            Console.WriteLine("[INFO]: [FILTER TYPE]: Include");
+        }
+        else if (_settings.Exclude != null && _settings.Exclude.Count > 0)
+        {
+            Console.WriteLine("[INFO]: [FILTER TYPE]: Exclude");
+        }
+        else
+        {
+            Console.WriteLine("[INFO]: [FILTER TYPE]: None");
+        }
+
+        List<Models.GitLab.Project> projects = await API.GitLab.GetProjects(_httpClient, _settings);
+        foreach (Models.GitLab.Project project in projects.OrderBy(o => o.Path_With_Namespace))
+        {
+            // Include Filter:
+            if (_settings.Include != null && _settings.Include.Count > 0)
+            {
+                if (!_settings.Include.Contains(project.Path_With_Namespace))
+                {
+                    projects.Remove(project);
+                }
+                else
+                {
+                    Console.WriteLine($"[INFO]: [Include] {project.Path_With_Namespace}");
+                }
+            }
+
+            // Exclude Filter:
+            else if (_settings.Exclude != null && _settings.Exclude.Count > 0)
+            {
+                if (_settings.Exclude.Contains(project.Path_With_Namespace))
+                {
+                    projects.Remove(project);
+                }
+                else
+                {
+                    Console.WriteLine($"[INFO]: [Include] {project.Path_With_Namespace}");
+                }
+            }
+
+            // No Filter:
+            else
+            {
+                Console.WriteLine($"[INFO]: [Include] {project.Path_With_Namespace}");
+            }
+        }
+
+        return projects;
+    }
+
+    static async Task LinkGitLabLabels(List<Models.GitLab.Project> projects)
+    {
+        foreach (Models.GitLab.Project project in projects.OrderBy(o => o.Path_With_Namespace))
+        {
+            foreach (Models.GitLab.Label label in await API.GitLab.GetProjectLabels(project, _httpClient, _settings))
+            {
+                var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == project.Id && o.LabelId == label.Id).FirstOrDefaultAsync<Models.Database.Label>();
+                if (labelSearch == null)
+                {
+                    using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "/data/labels.json");
+                    // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
+                    List<Configuration.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.Label>>(openStream);
+
+                    foreach (Configuration.Label customLabel in customLabels)
+                    {
+                        if (label.Name == customLabel.Name)
+                        {
+                            await _database.AddAsync<Models.Database.Label>(new Models.Database.Label
+                            {
+                                IndexId = customLabels.IndexOf(customLabel),
+                                LabelId = label.Id,
+                                RepositoryId = project.Id
+                            });
+                            Console.WriteLine($"[INFO]: [LINK] {project.Path_With_Namespace} (ID: {label.Id})");
+                        }
+                    }
+                }
+            }
+        }
+        await _database.SaveChangesAsync();
+    }
+
+    static async Task CreateGitLabLabels(List<Models.GitLab.Project> projects)
+    {
+        await LinkGitLabLabels(projects);
+        foreach (Models.GitLab.Project project in projects.OrderBy(o => o.Path_With_Namespace))
+        {
+            using FileStream openStream = File.OpenRead(AppContext.BaseDirectory + "/data/labels.json");
+            // Do NOT index <List<Configuration.Label>>. The index of each label is crucial to linking repository labels to changes.
+            List<Configuration.GitLab.Label> customLabels = await JsonSerializer.DeserializeAsync<List<Configuration.GitLab.Label>>(openStream);
+
+            foreach (Configuration.GitLab.Label customLabel in customLabels)
+            {
+                var labelSearch = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == project.Id && o.IndexId == customLabels.IndexOf(customLabel)).FirstOrDefaultAsync<Models.Database.Label>();
+                if (labelSearch == null)
+                {
+                    Models.GitLab.Label label = new Models.GitLab.Label();
+                    label.Name = customLabel.Name;
+                    label.Description = customLabel.Description;
+                    label.Color = customLabel.Color;
+                    label.Priority = customLabel.Priority;
+                    HttpResponseMessage response = await API.GitLab.CreateProjectLabel(project, label, _httpClient, _settings);
+                    if(response.IsSuccessStatusCode)
+                    {
+                        Models.GitLab.Label newLabel = await response.Content.ReadFromJsonAsync<Models.GitLab.Label>();
+                        Console.WriteLine($"[INFO]: [CREATE] {project.Path_With_Namespace} (ID: {newLabel.Id})");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[{response.StatusCode}] " + response.Content.ReadAsStringAsync().Result);
+                    }
+                    
+                    
+                }
+                else
+                {
+                    Models.GitLab.Label label = new Models.GitLab.Label();
+                    label.Name = customLabel.Name;
+                    label.New_Name = label.Name;
+                    label.Description = customLabel.Description;
+                    label.Color = customLabel.Color;
+                    label.Priority = customLabel.Priority;
+                    HttpResponseMessage response = await API.GitLab.UpdateProjectLabel(project, label, labelSearch.LabelId, _httpClient, _settings);
+                    Console.WriteLine($"[INFO]: [UPDATE] {project.Path_With_Namespace} (ID: {labelSearch.LabelId})");
+                }
+            }
+        }
+        await LinkGitLabLabels(projects);
     }
 
     static async Task<List<Repository>> FilterRepositories()
@@ -168,7 +326,7 @@ class Program
                     label.Is_Archived = customLabel.Archived;
                     HttpResponseMessage response = await API.Forgejo.CreateRepositoryLabel(repo, label, _httpClient, _settings);
                     Models.Forgejo.Label newLabel = await response.Content.ReadFromJsonAsync<Models.Forgejo.Label>();
-                    Console.WriteLine($"[INFO]: [CREATE] ${repo.Full_Name} (ID: ${newLabel.Id})");
+                    Console.WriteLine($"[INFO]: [CREATE] {repo.Full_Name} (ID: {newLabel.Id})");
                 }
                 else
                 {

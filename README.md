@@ -1,4 +1,4 @@
-# Forgejo Label Sync
+# Label Sync
 
 A docker image that allows you to sync label changes across your Forgejo instance.
 
@@ -55,34 +55,44 @@ services:
     image: mcuadros/ofelia:latest
     container_name: ofelia
     depends_on:
-      - forgejo-label-sync
+      - label-sync
     labels:
-      ofelia.job-run.forgejo-label-sync.schedule: "@every 15m"
-      ofelia.job-run.forgejo-label-sync.container: "forgejo-label-sync"
-      ofelia.job-run.forgejo-label-sync.no-overlap: true
+      ofelia.job-run.label-sync.schedule: "@every 15m"
+      ofelia.job-run.label-sync.container: "label-sync"
+      ofelia.job-run.label-sync.no-overlap: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command: daemon --docker
     restart: unless-stopped
 
-  forgejo-label-sync:
-    image: code.douglasparker.dev/forgejo/label-sync:latest
-    container_name: forgejo-label-sync
+  label-sync:
+    image: code.douglasparker.dev/douglasparker/label-sync:latest
+    container_name: label-sync
     volumes:
-      - forgejo-label-sync:/app/data
+      - label-sync:/app/data
 
 volumes:
-  forgejo-label-sync:
+  label-sync:
 ```
+
+### Settings (settings.json)
+
+| Forge (int)     | Url (string)                  | Username (string) | Include (String Array)                        | Exclude (String Array)                        | ApiKey (String) | LogLevel (String) |
+| --------------- | ----------------------------- | ----------------- | --------------------------------------------- | --------------------------------------------- | --------------- | ----------------- |
+| `1` = GitHub    | *Only for GitHub Enterprise*  | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `ghp_`          | `info`            |
+| `2` = GitLab    | *Only for GitLab On-premise*  | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `glpat-`        | `info`            |
+| `3` = Bitbucket | N/A                           | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | ``              | `info`            |
+| `4` = Forgejo   | `https://forgejo.example.com` | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | ``              | `info`            |
+
 
 #### Edit Settings
 
 ```docker
-docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json
+docker run --rm -it -v ofelia_label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json
 ```
 
 #### Edit Labels
 
 ```docker
-docker run --rm -it -v ofelia_forgejo-label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json
+docker run --rm -it -v ofelia_label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json
 ```

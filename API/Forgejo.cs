@@ -37,7 +37,7 @@ class Forgejo
     }
     public static async Task<Models.Forgejo.Label> DeleteRepositoryLabel(Repository repository, Int64 labelId, HttpClient httpClient, Settings settings)
     {
-        return await httpClient.DeleteFromJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/${labelId}");
+        return await httpClient.DeleteFromJsonAsync<Models.Forgejo.Label>($"{settings.Url}/api/v1/repos/{repository.Full_Name}/labels/{labelId}");
     }
     public static void PurgeRepositoryLabels()
     {

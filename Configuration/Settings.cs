@@ -2,6 +2,7 @@ namespace Configuration;
 
 class Settings
 {
+    public int Forge { get; set; }
     public string Url { get; set; }
     public string Username { get; set; }
     public List<string> Include { get; set; }
