@@ -48,7 +48,7 @@ class Program
 
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "token 07ca309c661275b91ee989c8c6ff133fba838dbf");
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {_settings.ApiKey}");
 
         await _database.Database.OpenConnectionAsync();
         await _database.Database.MigrateAsync();
