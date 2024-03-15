@@ -1,0 +1,2 @@
+include:
+  - remote: 'https://code.douglasparker.dev/gitlab/pipelines/-/raw/main/docker/release.yml'
