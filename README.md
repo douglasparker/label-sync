@@ -88,11 +88,11 @@ volumes:
 #### Edit Settings
 
 ```docker
-docker run --rm -it -v ofelia_label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/settings.json
+docker run --rm -it -v ofelia_label-sync:/app/data registry.douglasparker.dev/os/alpine:latest nano /app/data/settings.json
 ```
 
 #### Edit Labels
 
 ```docker
-docker run --rm -it -v ofelia_label-sync:/app/data code.douglasparker.dev/os/alpine:latest nano /app/data/labels.json
+docker run --rm -it -v ofelia_label-sync:/app/data registry.douglasparker.dev/os/alpine:latest nano /app/data/labels.json
 ```
