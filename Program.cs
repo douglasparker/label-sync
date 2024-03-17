@@ -235,6 +235,7 @@ class Program
                 if (isDefinedLabel == null)
                 {
                     await API.GitLab.DeleteProjectLabel(project, label.Id, _httpClient, _settings);
+                    Console.WriteLine($"[INFO]: [DELETE] {project.Path_With_Namespace} (ID: {label.Id})");
                 }
             }
         }
@@ -379,6 +380,7 @@ class Program
                 if (isDefinedLabel == null)
                 {
                     await API.Forgejo.DeleteRepositoryLabel(repo, label.Id, _httpClient, _settings);
+                    Console.WriteLine($"[INFO]: [DELETE] {repo.Full_Name} (ID: {label.Id})");
                 }
             }
         }
