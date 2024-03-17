@@ -28,16 +28,17 @@ class Program
             File.Copy("settings.template.json", AppContext.BaseDirectory + "/data/settings.json");
         }
 
-        if (!File.Exists(AppContext.BaseDirectory + "/data/settings.json"))
-        {
-            Console.WriteLine("[ERROR]: settings.json is missing!");
-            Environment.Exit(1);
-        }
-
         if (!File.Exists(AppContext.BaseDirectory + "/data/labels.json"))
         {
-            Console.WriteLine("[ERROR]: labels.json is missing!");
-            Environment.Exit(1);
+            switch(_settings.Forge)
+            {
+                case (int)Enum.Forge.GitLab:
+                    File.Copy("labels.gitlab.template.json", AppContext.BaseDirectory + "/data/labels.json");
+                    break;
+                case (int)Enum.Forge.Forgejo:
+                    File.Copy("labels.forgejo.template.json", AppContext.BaseDirectory + "/data/labels.json");
+                    break;
+            }
         }
 
         IConfiguration configuration = new ConfigurationBuilder()

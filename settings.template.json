@@ -3,9 +3,10 @@
         "Forge": 2,
         "Url": "",
         "Username": "",
+        "ApiKey": "",
         "Include": [],
         "Exclude": [],
-        "ApiKey": "",
+        "PurgeUndefinedLabels": false,
         "LogLevel": ""
     }
 }
