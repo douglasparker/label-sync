@@ -28,12 +28,14 @@ class Program
             File.Copy("settings.template.json", AppContext.BaseDirectory + "/data/settings.json");
         }
 
-        if(!File.Exists(AppContext.BaseDirectory + "/data/settings.json")) {
+        if (!File.Exists(AppContext.BaseDirectory + "/data/settings.json"))
+        {
             Console.WriteLine("[ERROR]: settings.json is missing!");
             Environment.Exit(1);
         }
 
-        if(!File.Exists(AppContext.BaseDirectory + "/data/labels.json")) {
+        if (!File.Exists(AppContext.BaseDirectory + "/data/labels.json"))
+        {
             Console.WriteLine("[ERROR]: labels.json is missing!");
             Environment.Exit(1);
         }
@@ -50,32 +52,39 @@ class Program
 
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        switch(_settings.Forge)
+        switch (_settings.Forge)
         {
-            case (int) Forge.GitHub:
+            case (int)Forge.GitHub:
                 Console.WriteLine("GitHub is not currently an implimented forge.");
                 break;
-            case (int) Forge.GitLab:
+            case (int)Forge.GitLab:
                 Console.WriteLine("[INFO]: [FORGE]: GitLab");
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_settings.ApiKey}");
                 await _database.Database.OpenConnectionAsync();
                 await _database.Database.MigrateAsync();
                 List<Models.GitLab.Project> projects = await FilterGitLabRepositories();
-                //await API.GitLab.PurgeAllProjectLabels(projects, _httpClient, _settings);
                 await CreateGitLabLabels(projects);
+                if(_settings.PurgeUndefinedLabels)
+                {
+                    await PurgeUndefinedGitLabLabels(projects);
+                }
                 await _database.Database.CloseConnectionAsync();
 
                 break;
-            case (int) Forge.Bitbucket:
+            case (int)Forge.Bitbucket:
                 Console.WriteLine("Bitbucket is not currently an implimented forge.");
                 break;
-            case (int) Forge.Forgejo:
+            case (int)Forge.Forgejo:
                 Console.WriteLine("[INFO]: [FORGE]: Forgejo");
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {_settings.ApiKey}");
                 await _database.Database.OpenConnectionAsync();
                 await _database.Database.MigrateAsync();
                 _repositories = await FilterRepositories();
                 await CreateLabels();
+                if(_settings.PurgeUndefinedLabels)
+                {
+                    await PurgeUndefinedForgejoLabels();
+                }
                 await _database.Database.CloseConnectionAsync();
                 break;
         }
@@ -166,6 +175,7 @@ class Program
         }
         await _database.SaveChangesAsync();
     }
+    
 
     static async Task CreateGitLabLabels(List<Models.GitLab.Project> projects)
     {
@@ -187,7 +197,7 @@ class Program
                     label.Color = customLabel.Color;
                     label.Priority = customLabel.Priority;
                     HttpResponseMessage response = await API.GitLab.CreateProjectLabel(project, label, _httpClient, _settings);
-                    if(response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
                         Models.GitLab.Label newLabel = await response.Content.ReadFromJsonAsync<Models.GitLab.Label>();
                         Console.WriteLine($"[INFO]: [CREATE] {project.Path_With_Namespace} (ID: {newLabel.Id})");
@@ -196,8 +206,8 @@ class Program
                     {
                         Console.WriteLine($"[{response.StatusCode}] " + response.Content.ReadAsStringAsync().Result);
                     }
-                    
-                    
+
+
                 }
                 else
                 {
@@ -213,6 +223,21 @@ class Program
             }
         }
         await LinkGitLabLabels(projects);
+    }
+
+    static async Task PurgeUndefinedGitLabLabels(List<Models.GitLab.Project> projects)
+    {
+        foreach (Models.GitLab.Project project in projects.OrderBy(o => o.Path_With_Namespace))
+        {
+            foreach (Models.GitLab.Label label in await API.GitLab.GetProjectLabels(project, _httpClient, _settings))
+            {
+                var isDefinedLabel = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == project.Id && o.LabelId == label.Id).FirstOrDefaultAsync<Models.Database.Label>();
+                if (isDefinedLabel == null)
+                {
+                    await API.GitLab.DeleteProjectLabel(project, label.Id, _httpClient, _settings);
+                }
+            }
+        }
     }
 
     static async Task<List<Repository>> FilterRepositories()
@@ -342,5 +367,20 @@ class Program
             }
         }
         await LinkLabels();
+    }
+
+    static async Task PurgeUndefinedForgejoLabels()
+    {
+        foreach (var repo in _repositories.OrderBy(o => o.Full_Name))
+        {
+            foreach (var label in await API.Forgejo.GetRepositoryLabels(repo, _httpClient, _settings))
+            {
+                var isDefinedLabel = await _database.Labels.Where<Models.Database.Label>(o => o.RepositoryId == repo.Id && o.LabelId == label.Id).FirstOrDefaultAsync<Models.Database.Label>();
+                if (isDefinedLabel == null)
+                {
+                    await API.Forgejo.DeleteRepositoryLabel(repo, label.Id, _httpClient, _settings);
+                }
+            }
+        }
     }
 }
