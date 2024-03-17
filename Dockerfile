@@ -7,10 +7,11 @@ COPY *.csproj .
 RUN dotnet restore
 # then we copy the rest of the source and build.
 COPY . .
+RUN dotnet publish -c release -o /app --no-restore
+# copy over configuration templates
 COPY settings.template.json /app
 COPY labels.gitlab.template.json /app
 COPY labels.forgejo.template.json /app
-RUN dotnet publish -c release -o /app --no-restore
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app
