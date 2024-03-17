@@ -7,12 +7,12 @@ COPY *.csproj .
 RUN dotnet restore
 # then we copy the rest of the source and build.
 COPY . .
+COPY settings.template.json /app
+COPY labels.gitlab.template.json /app
+COPY labels.forgejo.template.json /app
 RUN dotnet publish -c release -o /app --no-restore
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app
-COPY --from=build /app ./
-COPY --from=build settings.template.json ./
-COPY --from=build labels.gitlab.template.json ./
-COPY --from=build labels.forgejo.template.json ./
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "LabelSync.dll"]
