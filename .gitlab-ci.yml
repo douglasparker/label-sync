@@ -1,3 +1,3 @@
 include:
-  - remote: 'https://code.douglasparker.dev/gitlab/ci/docker/build/-/raw/main/.gitlab-ci.yml'
-  - remote: 'https://code.douglasparker.dev/gitlab/ci/docker/release/-/raw/main/.gitlab-ci.yml'
+  - component: code.douglasparker.dev/docker/components/build@1
+  - component: code.douglasparker.dev/docker/components/release@1
