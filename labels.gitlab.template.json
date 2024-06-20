@@ -1,131 +1,131 @@
 [
     {
-        "Name": "Priority/Low",
+        "Name": "Priority::Low",
         "Description": "",
         "Color": "#EC5F67"
     },
     {
-        "Name": "Priority/Medium",
+        "Name": "Priority::Medium",
         "Description": "",
         "Color": "#EC5F67"
     },
     {
-        "Name": "Priority/High",
+        "Name": "Priority::High",
         "Description": "",
         "Color": "#EC5F67"
     },
     {
-        "Name": "Priority/Critical",
+        "Name": "Priority::Critical",
         "Description": "",
         "Color": "#EC5F67"
     },
     {
-        "Name": "Type/Bug",
+        "Name": "Type::Bug",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Dependency",
+        "Name": "Type::Dependency",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Documentation",
+        "Name": "Type::Documentation",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Enhancement",
+        "Name": "Type::Enhancement",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Feature",
+        "Name": "Type::Feature",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Feature Request",
+        "Name": "Type::Feature Request",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Legal",
+        "Name": "Type::Legal",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Question",
+        "Name": "Type::Question",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Refactor",
+        "Name": "Type::Refactor",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Security",
+        "Name": "Type::Security",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Type/Text",
+        "Name": "Type::Text",
         "Description": "",
         "Color": "#6699CC"
     },
     {
-        "Name": "Category/Hardware",
+        "Name": "Category::Hardware",
         "Description": "",
         "Color": "#F9EF57"
     },
     {
-        "Name": "Category/Network",
+        "Name": "Category::Network",
         "Description": "",
         "Color": "#F9EF57"
     },
     {
-        "Name": "Category/Software",
+        "Name": "Category::Software",
         "Description": "",
         "Color": "#F9EF57"
     },
     {
-        "Name": "Feedback/Help Wanted",
+        "Name": "Feedback::Help Wanted",
         "Description": "",
         "Color": "#F99157"
     },
     {
-        "Name": "Feedback/Review Needed",
+        "Name": "Feedback::Review Needed",
         "Description": "",
         "Color": "#F99157"
     },
     {
-        "Name": "Feedback/Revision Needed",
+        "Name": "Feedback::Revision Needed",
         "Description": "",
         "Color": "#F99157"
     },
     {
-        "Name": "Review/Approved",
+        "Name": "Review::Approved",
         "Description": "",
         "Color": "#C594C5"
     },
     {
-        "Name": "Review/Declined",
+        "Name": "Review::Declined",
         "Description": "",
         "Color": "#C594C5"
     },
     {
-        "Name": "Review/Duplicate",
+        "Name": "Review::Duplicate",
         "Description": "",
         "Color": "#C594C5"
     },
     {
-        "Name": "Review/Not A Bug",
+        "Name": "Review::Not A Bug",
         "Description": "",
         "Color": "#C594C5"
     },
     {
-        "Name": "Review/Verified",
+        "Name": "Review::Verified",
         "Description": "",
         "Color": "#C594C5"
     }
