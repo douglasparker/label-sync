@@ -79,10 +79,16 @@ volumes:
 
 | Forge (int)     | Url (string)                  | Username (string) | Include (String Array)                        | Exclude (String Array)                        | ApiKey (String) | LogLevel (String) |
 | --------------- | ----------------------------- | ----------------- | --------------------------------------------- | --------------------------------------------- | --------------- | ----------------- |
-| `1` = GitHub    | `https://api.github.com`      | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `github_pat_`   | `info`            |
-| `2` = GitLab    | *Only for GitLab*             | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `glpat-`        | `info`            |
+| `1` = GitHub    | `https://api.github.com`      | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `github_pat_*`  | `info`            |
+| `2` = GitLab    | *Only for GitLab*             | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | `glpat-*`       | `info`            |
 | `3` = Bitbucket | N/A                           | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | ``              | `info`            |
 | `4` = Forgejo   | `https://forgejo.example.com` | `douglasparker`   | `["douglasparker/label-sync", "caddy/caddy"]` | `["douglasparker/label-sync", "caddy/caddy"]` | ``              | `info`            |
+
+#### GitHub PAT Permissions (Fine-grained personal access tokens)
+
+- "Metadata" repository permissions (read)
+- "Issues" repository permissions (read)
+- "Issues" repository permissions (write)
 
 
 #### Edit Settings
